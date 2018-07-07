@@ -70,6 +70,7 @@ class AuthController extends Controller
         ]);
         $user->role = 'customer';
         $user->save();
+        
         return $user;
     }
 }
