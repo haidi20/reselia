@@ -47,7 +47,7 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    @if (Auth::check())
+                    @if (\Auth::check())
                       <li><a href="{{ url('/home')}}">Home</a></li>
                       @can('admin-access')
                         <li class="dropdown">
@@ -56,6 +56,7 @@
                           </a>
                           <ul class="dropdown-menu" role="menu">
                             <li><a href="{{route('categories.index')}}"><i class="fa fa-btn fa-tags"></i>Categories</a></li>
+                            <li><a href="{{route('products.index')}}">products</a></li>
                           </ul>
                         </li>
                       @endcan
@@ -83,6 +84,15 @@
             </div>
         </div>
     </nav>
+
+    @if (session()->has('flash_notification.message'))
+      <div class="container">
+        <div class="alert alert-{{ session()->get('flash_notification.level') }}">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          {{ session()->get('flash_notification.message') }}
+        </div>
+      </div>
+    @endif
 
     @yield('content')
 

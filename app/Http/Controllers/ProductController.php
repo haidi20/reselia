@@ -6,16 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Category;
+use App\Product;
 
-class CategoriesController extends Controller
+class ProductController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
       $this->middleware('auth');
       $this->middleware('role:admin');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,10 +21,12 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Category::where('title','LIKE','%'.$request->get('q').'%')
-                              ->orderBy('title')
-                              ->paginate(5);
-        return view('categories.index',compact('categories'));
+        $q = $request->get('q');
+        $products = Product::where('name' ,'like','%'.$q.'%')
+                            ->orWhere('model','like','%'.$q.'%')
+                            ->orderBy('name')->paginate(10);
+
+        return view('products.index',compact('products','q'));
     }
 
     /**
@@ -36,7 +36,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        //
     }
 
     /**
@@ -47,14 +47,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-      $this->validate($request, [
-        'title' => 'required|string|max:255|unique:categories',
-        'parent_id' => 'exists:categories,id'
-      ]);
-
-      Category::create($request->all());
-      \Flash::success($request->get('title'),'category saved.');
-      return redirect()->route('categories.index');
+        //
     }
 
     /**
@@ -99,8 +92,6 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        Category::find($id)->delete();
-        \Flash::success('category deleted.');
-        return redirect()->route('categories.index');
+        //
     }
 }
